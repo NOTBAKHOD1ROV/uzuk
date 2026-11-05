@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bitta savolim bor</title>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7efe4;--ink:#1d3a30;--mute:#5d746a;--gold:#b8842a;--btn:#1d3a30;--btnt:#f7efe4;--alt:#e6dccb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10241d;--ink:#f6ecda;--mute:#9fb8ad;--gold:#e3b862;--btn:#e3b862;--btnt:#10241d;--alt:#1e3a30;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10241d;--ink:#f6ecda;--mute:#9fb8ad;--gold:#e3b862;--btn:#e3b862;--btnt:#10241d;--alt:#1e3a30;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:18px/1.5 Nunito,system-ui,sans-serif;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+main{width:100%;max-width:520px;padding:20px}
+svg{width:min(260px,62vw);height:auto;display:block;margin:0 auto 10px}
+.spark{transform-origin:center;transform-box:fill-box;animation:tw 2.4s ease-in-out 1.2s 2}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+h1{font:400 clamp(34px,9vw,56px)/1.15 Gloock,Georgia,serif;margin:0 0 6px}
+p{margin:0;color:var(--mute)}
+.btns{position:relative;height:120px;margin-top:22px;display:flex;gap:18px;justify-content:center;align-items:center}
+button{font:600 17px Nunito,sans-serif;border:0;border-radius:99px;padding:12px 28px;cursor:pointer;transition:transform .2s}
+#yes{background:var(--btn);color:var(--btnt)}
+#no{background:var(--alt);color:var(--ink)}
+#done{display:none}
+#done h1{color:var(--gold)}
+@media (prefers-reduced-motion:reduce){.spark{animation:none}}
+</style>
+</head>
+<body>
+<main>
+<div id="ask">
+<svg viewBox="0 0 200 220" role="img" aria-label="Brilliant uzuk">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e1a1"/><stop offset=".5" stop-color="#d1a23f"/><stop offset="1" stop-color="#8f6418"/></linearGradient>
+<linearGradient id="d" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cfe7f7"/><stop offset="1" stop-color="#8fb9dc"/></linearGradient>
+</defs>
+<circle cx="100" cy="142" r="62" fill="none" stroke="url(#g)" stroke-width="13"/>
+<circle cx="100" cy="142" r="55" fill="none" stroke="#8f6418" stroke-opacity=".35" stroke-width="1.5"/>
+<path d="M82 84 L118 84 L128 62 L72 62 Z" fill="url(#g)"/>
+<polygon points="72,62 128,62 140,44 100,20 60,44" fill="url(#d)" stroke="#6d93b5" stroke-width="1"/>
+<polyline points="60,44 140,44" stroke="#6d93b5" stroke-width="1" fill="none"/>
+<polyline points="72,62 84,44 100,20 116,44 128,62" stroke="#6d93b5" stroke-width="1" fill="none"/>
+<polyline points="84,44 100,62 116,44" stroke="#6d93b5" stroke-width="1" fill="none"/>
+<g fill="var(--gold)">
+<path class="spark" d="M165 30 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z"/>
+<path class="spark" style="animation-delay:1.8s" d="M32 52 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z"/>
+<path class="spark" style="animation-delay:2.4s" d="M150 78 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+</g>
+</svg>
+<h1 id="q">Xotinim bo‘lasanmi?</h1>
+<p id="name"></p>
+<div class="btns" id="btns">
+<button id="yes">Ha</button>
+<button id="no">Yo‘q</button>
+</div>
+</div>
+<div id="done">
+<svg viewBox="0 0 200 220" aria-hidden="true" style="width:min(150px,40vw)"><use href="#none"/></svg>
+<h1>Rahmat, jonim!</h1>
+<p>Sen meni dunyodagi eng baxtli insonga aylantirding. Seni sevaman.</p>
+</div>
+</main>
+<script>
+/* Ismni shu yerga yozing */
+const HER="";
+const $=id=>document.getElementById(id);
+if(HER){$("q").textContent=HER+", xotinim bo‘lasanmi?"}
+const no=$("no"),yes=$("yes"),btns=$("btns");
+let tries=0;
+function dodge(){
+ tries++;
+ const r=btns.getBoundingClientRect();
+ const w=Math.max(0,r.width-no.offsetWidth),h=Math.max(0,r.height-no.offsetHeight);
+ no.style.position="absolute";
+ no.style.left=Math.random()*w+"px";
+ no.style.top=Math.random()*h+"px";
+ no.style.transform="scale("+Math.max(.5,1-tries*.06)+")";
+ yes.style.transform="scale("+Math.min(1.7,1+tries*.07)+")";
+}
+no.addEventListener("mouseenter",dodge);
+no.addEventListener("touchstart",e=>{e.preventDefault();dodge()},{passive:false});
+no.addEventListener("click",dodge);
+yes.onclick=()=>{
+ const a=$("ask"),d=$("done");
+ d.querySelector("svg").innerHTML=a.querySelector("svg").innerHTML;
+ d.querySelector("svg").setAttribute("viewBox","0 0 200 220");
+ a.style.display="none";d.style.display="block";
+};
+</script>
+</body>
+</html>
